@@ -1,0 +1,93 @@
+create table alunos(
+matricula integer not null primary key,
+nome varchar(20) not null,
+data_nascimento date not null,
+fone char(8) null
+);
+---------------------------------------------------------------
+
+create table disciplinas(
+coddisciplina integer not null primary key,
+descricao varchar(20) not null,
+carga_horaria integer not null default 72
+);
+--------------outra forma de fazer------------------------------------------------
+
+create table disciplinas(
+coddisciplina integer not null primary key,
+descricao varchar(20) not null,
+carga_horaria integer not null 
+);
+
+
+alter table disciplinas
+alter column carga_horaria set default 72;
+----------------------------------------------------------------
+
+create table area(
+codarea integer not null primary key,
+descricao varchar(20) not null
+);
+
+----------------------------------------------------------------
+create table professor(
+cpf char(11) not null primary key,
+nome varchar(20) not null,
+endereco varchar(50) not null,
+fone char(8) null,
+codarea integer not null references area (codarea)
+);
+-------------------------------------------------------------------
+
+create table matricula 
+(
+  matricula integer not null references alunos(matricula),
+  cpf char(11) not null references professor (cpf),
+  coddisciplina integer not null references disciplinas(coddisciplina),
+  ano integer not null,
+  nota real null check(nota>=0 and nota<=10)
+  );
+
+--------------outra forma de fazer------------------------------------------------
+
+create table matricula 
+(
+  matricula integer not null references alunos(matricula),
+  cpf char(11) not null references professor (cpf),
+  coddisciplina integer not null references disciplinas(coddisciplina),
+  ano integer not null,
+  nota real null
+  );
+
+--Na inclusão do check você deve dar um nome a constranint
+
+ALTER TABLE matricula ADD CONSTRAINT chk_nota CHECK (nota>=0 and nota<=10);
+
+---------------------------------------------------------------------
+alter table professor add fonecelular char (8) null;
+
+----------------------------------------------------------------------
+
+alter table professor drop endereco;
+
+----------------------------------------------------------------------
+
+alter table alunos alter column nome type varchar(30);
+
+------------------------------------------------------------------------
+
+alter table alunos alter column fone set not null;
+
+------------------------------------------------------------------------
+
+alter table alunos add codarea integer not null;
+
+-----------------------------------------------------------------------
+
+alter table alunos add foreign key (codarea) references area;
+
+------------------------------------------------------------------------
+drop table matricula;
+--------------------------------
+alter table alunos 
+drop constraint alunos_codarea_fkey;
